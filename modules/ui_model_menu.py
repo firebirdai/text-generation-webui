@@ -158,6 +158,7 @@ def create_ui():
                     shared.gradio['autoload_model'] = gr.Checkbox(value=shared.settings['autoload_model'], label='Autoload the model', info='Whether to load the model as soon as it is selected in the Model dropdown.', interactive=not mu)
 
                 with gr.Tab("Download"):
+                    shared.gradio['hf_token'] = gr.Textbox(placeholder="HF token (optional)", show_label=False, max_lines=1, interactive=not mu)
                     shared.gradio['custom_model_menu'] = gr.Textbox(label="Download model or LoRA", info="Enter the Hugging Face username/model path, for instance: facebook/galactica-125m. To specify a branch, add it at the end after a \":\" character like this: facebook/galactica-125m:main. To download a single file, enter its name in the second box.", interactive=not mu)
                     shared.gradio['download_specific_file'] = gr.Textbox(placeholder="File name (for GGUF models)", show_label=False, max_lines=1, interactive=not mu)
                     with gr.Row():
@@ -226,10 +227,10 @@ def create_event_handlers():
         save_model_settings, gradio('model_menu', 'interface_state'), gradio('model_status'), show_progress=False)
 
     shared.gradio['lora_menu_apply'].click(load_lora_wrapper, gradio('lora_menu'), gradio('model_status'), show_progress=False)
-    shared.gradio['download_model_button'].click(download_model_wrapper, gradio('custom_model_menu', 'download_specific_file'), gradio('model_status'), show_progress=True)
-    shared.gradio['get_file_list'].click(partial(download_model_wrapper, return_links=True), gradio('custom_model_menu', 'download_specific_file'), gradio('model_status'), show_progress=True)
+    shared.gradio['download_model_button'].click(download_model_wrapper, gradio('custom_model_menu', 'download_specific_file', 'hf_token'), gradio('model_status'), show_progress=True)
+    shared.gradio['get_file_list'].click(partial(download_model_wrapper, hf_token=gradio('hf_token'), return_links=True), gradio('custom_model_menu', 'download_specific_file'), gradio('model_status'), show_progress=True)
     shared.gradio['autoload_model'].change(lambda x: gr.update(visible=not x), gradio('autoload_model'), gradio('load_model'))
-    shared.gradio['create_llamacpp_hf_button'].click(create_llamacpp_hf, gradio('gguf_menu', 'unquantized_url'), gradio('model_status'), show_progress=True)
+    shared.gradio['create_llamacpp_hf_button'].click(create_llamacpp_hf, gradio('gguf_menu', 'unquantized_url', 'hf_token'), gradio('model_status'), show_progress=True)
     shared.gradio['customized_template_submit'].click(save_instruction_template, gradio('model_menu', 'customized_template'), gradio('model_status'), show_progress=True)
 
 
@@ -270,9 +271,12 @@ def load_lora_wrapper(selected_loras):
     yield ("Successfuly applied the LoRAs")
 
 
-def download_model_wrapper(repo_id, specific_file, progress=gr.Progress(), return_links=False, check=False):
+def download_model_wrapper(repo_id, specific_file, hf_token=None, progress=gr.Progress(), return_links=False, check=False):
     try:
-        downloader = importlib.import_module("download-model").ModelDownloader()
+        if isinstance(hf_token, list):
+            hf_token = hf_token[0]
+
+        downloader = importlib.import_module("download-model").ModelDownloader(token=hf_token)
 
         progress(0.0)
         model, branch = downloader.sanitize_model_and_branch_names(repo_id, None)
@@ -312,9 +316,9 @@ def download_model_wrapper(repo_id, specific_file, progress=gr.Progress(), retur
         yield traceback.format_exc().replace('\n', '\n\n')
 
 
-def create_llamacpp_hf(gguf_name, unquantized_url, progress=gr.Progress()):
+def create_llamacpp_hf(gguf_name, unquantized_url, hf_token=None, progress=gr.Progress()):
     try:
-        downloader = importlib.import_module("download-model").ModelDownloader()
+        downloader = importlib.import_module("download-model").ModelDownloader(token=hf_token)
 
         progress(0.0)
         model, branch = downloader.sanitize_model_and_branch_names(unquantized_url, None)
