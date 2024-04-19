@@ -1,3 +1,4 @@
 # Only used by the one-click installer.
 # Example:
 # --listen --api
+--listen-port 5100 --gradio-auth enigma:c3nWbroKctFDRHRz7mNf --gpu-memory 80 80 80 80 --auto-devices
