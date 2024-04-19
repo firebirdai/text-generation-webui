@@ -158,12 +158,13 @@ def create_ui():
                     shared.gradio['autoload_model'] = gr.Checkbox(value=shared.settings['autoload_model'], label='Autoload the model', info='Whether to load the model as soon as it is selected in the Model dropdown.', interactive=not mu)
 
                 with gr.Tab("Download"):
-                    shared.gradio['hf_token'] = gr.Textbox(placeholder="HF token (optional)", show_label=False, max_lines=1, interactive=not mu)
-                    shared.gradio['custom_model_menu'] = gr.Textbox(label="Download model or LoRA", info="Enter the Hugging Face username/model path, for instance: facebook/galactica-125m. To specify a branch, add it at the end after a \":\" character like this: facebook/galactica-125m:main. To download a single file, enter its name in the second box.", interactive=not mu)
-                    shared.gradio['download_specific_file'] = gr.Textbox(placeholder="File name (for GGUF models)", show_label=False, max_lines=1, interactive=not mu)
-                    with gr.Row():
-                        shared.gradio['download_model_button'] = gr.Button("Download", variant='primary', interactive=not mu)
-                        shared.gradio['get_file_list'] = gr.Button("Get file list", interactive=not mu)
+                    with gr.Column():
+                        shared.gradio['custom_model_menu'] = gr.Textbox(label="Download model or LoRA", info="Enter the Hugging Face username/model path, for instance: facebook/galactica-125m. To specify a branch, add it at the end after a \":\" character like this: facebook/galactica-125m:main. To download a single file, enter its name in the second box.", interactive=not mu)
+                        shared.gradio['hf_token'] = gr.Textbox(placeholder="HF token (optional)", show_label=False, max_lines=1, interactive=not mu)
+                        shared.gradio['download_specific_file'] = gr.Textbox(placeholder="File name (for GGUF models)", show_label=False, max_lines=1, interactive=not mu)
+                        with gr.Row():
+                            shared.gradio['download_model_button'] = gr.Button("Download", variant='primary', interactive=not mu)
+                            shared.gradio['get_file_list'] = gr.Button("Get file list", interactive=not mu)
 
                 with gr.Tab("llamacpp_HF creator"):
                     with gr.Row():
