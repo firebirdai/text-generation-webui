@@ -14,11 +14,6 @@ WORKDIR /home/app/
 
 RUN apt-get update && apt-get install -y git openssh-client
 # Make ssh dir
-RUN mkdir /root/.ssh/
-# Copy over private key, and set permissions
-# Warning! Anyone who gets their hands on this image will be able
-# to retrieve this private key file from the corresponding image layer
-ADD id_rsa /root/.ssh/id_rsa
 RUN chmod 600 /root/.ssh/id_rsa
 # Create known_hosts
 RUN touch /root/.ssh/known_hosts

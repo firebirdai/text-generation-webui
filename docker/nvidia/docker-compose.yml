@@ -46,7 +46,7 @@ services:
       - ./softprompts:/home/app/text-generation-webui/softprompts
       - ./training:/home/app/text-generation-webui/training
       - ./cloudflared:/etc/cloudflared
-      - ./id_rsa:/home/vitaliy/ssh/github/atrix_git
+      - ~/.ssh/id_rsa:/home/vitaliy/ssh/github/atrix_git
     deploy:
       resources:
         reservations:
