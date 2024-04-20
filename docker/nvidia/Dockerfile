@@ -25,7 +25,7 @@ RUN touch /root/.ssh/known_hosts
 # Remove host checking
 RUN echo "Host github.com\n\tStrictHostKeyChecking no\n" >> /root/.ssh/config
 
-RUN git clone git@github.com:firebirdai/text-generation-webui.git
+RUN git clone -b feat/dynamic-hf-tokens git@github.com:firebirdai/text-generation-webui.git
 WORKDIR /home/app/text-generation-webui
 RUN GPU_CHOICE=A USE_CUDA118=FALSE LAUNCH_AFTER_INSTALL=FALSE INSTALL_EXTENSIONS=TRUE ./start_linux.sh --verbose
 COPY CMD_FLAGS.txt /home/app/text-generation-webui/
