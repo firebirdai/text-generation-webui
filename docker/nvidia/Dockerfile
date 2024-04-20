@@ -10,7 +10,7 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked,rw \
     apt update && \
     apt install --no-install-recommends -y git vim build-essential python3-dev pip bash curl && \
     rm -rf /var/lib/apt/lists/*
-RUN apt-get install openssh-client
+RUN apt-get update & apt-get install openssh-client
 WORKDIR /home/app/text-generation-webui
 ADD . .
 
