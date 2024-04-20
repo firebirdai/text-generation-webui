@@ -20,7 +20,10 @@ RUN mkdir /root/.ssh/
 # to retrieve this private key file from the corresponding image layer
 ADD id_rsa /root/.ssh/id_rsa
 RUN chmod 600 /root/.ssh/id_rsa
-ADD known_hosts /root/.ssh/known_hosts
+# Create known_hosts
+RUN touch /root/.ssh/known_hosts
+# Remove host checking
+RUN echo "Host github.com\n\tStrictHostKeyChecking no\n" >> /root/.ssh/config
 
 RUN git clone git@github.com:firebirdai/text-generation-webui.git
 WORKDIR /home/app/text-generation-webui

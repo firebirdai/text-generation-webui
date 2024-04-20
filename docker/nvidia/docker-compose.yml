@@ -47,7 +47,6 @@ services:
       - ./training:/home/app/text-generation-webui/training
       - ./cloudflared:/etc/cloudflared
       - ./id_rsa:/home/vitaliy/ssh/github/atrix_git
-      - ./known_hosts:/home/vitaliy/.ssh/known_hosts
     deploy:
       resources:
         reservations:
