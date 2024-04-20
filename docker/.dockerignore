@@ -8,3 +8,4 @@ Dockerfile
 /training
 /__pycache__
 /cache
+/installer_files
