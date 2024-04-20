@@ -6,3 +6,5 @@ Dockerfile
 /presets
 /prompts
 /training
+/__pycache__
+/cache

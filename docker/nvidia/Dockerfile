@@ -10,18 +10,8 @@ RUN --mount=type=cache,target=/var/cache/apt,sharing=locked,rw \
     apt update && \
     apt install --no-install-recommends -y git vim build-essential python3-dev pip bash curl && \
     rm -rf /var/lib/apt/lists/*
-WORKDIR /home/app/
-
-RUN apt-get update && apt-get install -y git openssh-client
-# Make ssh dir
-RUN chmod 600 /root/.ssh/id_rsa
-# Create known_hosts
-RUN touch /root/.ssh/known_hosts
-# Remove host checking
-RUN echo "Host github.com\n\tStrictHostKeyChecking no\n" >> /root/.ssh/config
-
-RUN git clone -b feat/dynamic-hf-tokens git@github.com:firebirdai/text-generation-webui.git
 WORKDIR /home/app/text-generation-webui
+ADD . .
 RUN GPU_CHOICE=A USE_CUDA118=FALSE LAUNCH_AFTER_INSTALL=FALSE INSTALL_EXTENSIONS=TRUE ./start_linux.sh --verbose
 COPY CMD_FLAGS.txt /home/app/text-generation-webui/
 EXPOSE ${CONTAINER_PORT:-7860} ${CONTAINER_API_PORT:-5000} ${CONTAINER_API_STREAM_PORT:-5005}
