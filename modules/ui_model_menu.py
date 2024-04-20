@@ -319,6 +319,9 @@ def download_model_wrapper(repo_id, specific_file, hf_token=None, progress=gr.Pr
 
 def create_llamacpp_hf(gguf_name, unquantized_url, hf_token=None, progress=gr.Progress()):
     try:
+        if isinstance(hf_token, list):
+            hf_token = hf_token[0]
+    
         downloader = importlib.import_module("download-model").ModelDownloader(token=hf_token)
 
         progress(0.0)
