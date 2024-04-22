@@ -333,30 +333,29 @@ def install_extensions_requirements():
 
 def update_requirements(initial_installation=False, pull=True):
     # TODO: disabling the git part for now because it's not needed for atrix yet
-    return
     # Create .git directory if missing
-    if not os.path.exists(os.path.join(script_dir, ".git")):
-        git_creation_cmd = 'git init -b main && git remote add origin https://github.com/oobabooga/text-generation-webui && git fetch && git symbolic-ref refs/remotes/origin/HEAD refs/remotes/origin/main && git reset --hard origin/main && git branch --set-upstream-to=origin/main'
-        run_cmd(git_creation_cmd, environment=True, assert_success=True)
+    # if not os.path.exists(os.path.join(script_dir, ".git")):
+    #     git_creation_cmd = 'git init -b main && git remote add origin https://github.com/oobabooga/text-generation-webui && git fetch && git symbolic-ref refs/remotes/origin/HEAD refs/remotes/origin/main && git reset --hard origin/main && git branch --set-upstream-to=origin/main'
+    #     run_cmd(git_creation_cmd, environment=True, assert_success=True)
 
-    if pull:
-        print_big_message("Updating the local copy of the repository with \"git pull\"")
+    # if pull:
+    #     print_big_message("Updating the local copy of the repository with \"git pull\"")
 
-        files_to_check = [
-            'start_linux.sh', 'start_macos.sh', 'start_windows.bat', 'start_wsl.bat',
-            'update_wizard_linux.sh', 'update_wizard_macos.sh', 'update_wizard_windows.bat', 'update_wizard_wsl.bat',
-            'one_click.py'
-        ]
+    #     files_to_check = [
+    #         'start_linux.sh', 'start_macos.sh', 'start_windows.bat', 'start_wsl.bat',
+    #         'update_wizard_linux.sh', 'update_wizard_macos.sh', 'update_wizard_windows.bat', 'update_wizard_wsl.bat',
+    #         'one_click.py'
+    #     ]
 
-        before_pull_hashes = {file_name: calculate_file_hash(file_name) for file_name in files_to_check}
-        run_cmd("git pull --autostash", assert_success=True, environment=True)
-        after_pull_hashes = {file_name: calculate_file_hash(file_name) for file_name in files_to_check}
+    #     before_pull_hashes = {file_name: calculate_file_hash(file_name) for file_name in files_to_check}
+    #     run_cmd("git pull --autostash", assert_success=True, environment=True)
+    #     after_pull_hashes = {file_name: calculate_file_hash(file_name) for file_name in files_to_check}
 
-        # Check for differences in installation file hashes
-        for file_name in files_to_check:
-            if before_pull_hashes[file_name] != after_pull_hashes[file_name]:
-                print_big_message(f"File '{file_name}' was updated during 'git pull'. Please run the script again.")
-                exit(1)
+    #     # Check for differences in installation file hashes
+    #     for file_name in files_to_check:
+    #         if before_pull_hashes[file_name] != after_pull_hashes[file_name]:
+    #             print_big_message(f"File '{file_name}' was updated during 'git pull'. Please run the script again.")
+    #             exit(1)
 
     if os.environ.get("INSTALL_EXTENSIONS", "").lower() in ("yes", "y", "true", "1", "t", "on"):
         install_extensions_requirements()
