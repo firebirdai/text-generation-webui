@@ -14,6 +14,7 @@ WORKDIR /home/app/text-generation-webui
 ADD . .
 
 RUN mkdir models
+RUN mkdir logs
 
 RUN GPU_CHOICE=A USE_CUDA118=FALSE LAUNCH_AFTER_INSTALL=FALSE INSTALL_EXTENSIONS=TRUE ./start_linux.sh --verbose
 COPY CMD_FLAGS.txt /home/app/text-generation-webui/
