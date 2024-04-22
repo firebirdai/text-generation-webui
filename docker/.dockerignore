@@ -2,3 +2,4 @@ Dockerfile
 /__pycache__
 /cache
 /installer_files
+/models
