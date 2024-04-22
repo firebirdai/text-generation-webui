@@ -47,10 +47,10 @@ class ModelDownloader:
             except ImportError:
                 token = os.getenv("HF_TOKEN")
 
-            if token is not None:
-                session.headers = {'authorization': f'Bearer {token}'}
+        if token is not None:
+            session.headers = {'authorization': f'Bearer {token}'}
 
-            return session
+        return session
 
     def sanitize_model_and_branch_names(self, model, branch):
         if model[-1] == '/':
