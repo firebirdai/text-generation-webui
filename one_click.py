@@ -332,6 +332,8 @@ def install_extensions_requirements():
 
 
 def update_requirements(initial_installation=False, pull=True):
+    # TODO: disabling the git part for now because it's not needed for atrix yet
+    return
     # Create .git directory if missing
     if not os.path.exists(os.path.join(script_dir, ".git")):
         git_creation_cmd = 'git init -b main && git remote add origin https://github.com/oobabooga/text-generation-webui && git fetch && git symbolic-ref refs/remotes/origin/HEAD refs/remotes/origin/main && git reset --hard origin/main && git branch --set-upstream-to=origin/main'
