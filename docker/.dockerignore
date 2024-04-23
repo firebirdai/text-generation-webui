@@ -1,8 +1,5 @@
-.env
 Dockerfile
-/characters
-/loras
+/__pycache__
+/cache
+/installer_files
 /models
-/presets
-/prompts
-/training

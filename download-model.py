@@ -25,23 +25,27 @@ base = os.environ.get("HF_ENDPOINT") or "https://huggingface.co"
 
 
 class ModelDownloader:
-    def __init__(self, max_retries=5):
+    def __init__(self, max_retries=5, token=None):
         self.max_retries = max_retries
+        self.token = token
 
     def get_session(self):
         session = requests.Session()
         if self.max_retries:
             session.mount('https://cdn-lfs.huggingface.co', HTTPAdapter(max_retries=self.max_retries))
             session.mount('https://huggingface.co', HTTPAdapter(max_retries=self.max_retries))
-
+	
         if os.getenv('HF_USER') is not None and os.getenv('HF_PASS') is not None:
             session.auth = (os.getenv('HF_USER'), os.getenv('HF_PASS'))
 
-        try:
-            from huggingface_hub import get_token
-            token = get_token()
-        except ImportError:
-            token = os.getenv("HF_TOKEN")
+        if self.token is not None:
+            token = self.token
+        else:
+            try:
+                from huggingface_hub import get_token
+                token = get_token()
+            except ImportError:
+                token = os.getenv("HF_TOKEN")
 
         if token is not None:
             session.headers = {'authorization': f'Bearer {token}'}
